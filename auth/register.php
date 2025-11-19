@@ -1,14 +1,7 @@
-// difkalestari6/ukk/ukk-a74c6983610426cfeaf45330d1b2cb6328d7fd90/auth/register.php
 <?php
-require_once '../config/database.php'; // Include database.php untuk mendapatkan fungsi is_logged_in() dan is_admin()
-
-// Perbaikan Error: Menggunakan fungsi helper yang benar untuk cek sesi
-if (is_logged_in()) {
-    if (is_admin()) {
-        header('Location: ../admin/index.php');
-    } else {
-        header('Location: ../user/dashboard.php');
-    }
+session_start();
+if (isset($_SESSION['user_id'])) {
+    header('Location: ../user/dashboard.php');
     exit();
 }
 ?>

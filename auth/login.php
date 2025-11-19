@@ -1,8 +1,8 @@
-// difkalestari6/ukk/ukk-a74c6983610426cfeaf45330d1b2cb6328d7fd90/auth/login.php
 <?php
+session_start();
 require_once '../config/database.php';
 
-// Perbaikan Redirect: Cek jika sudah login, arahkan ke dashboard yang benar
+// Redirect jika sudah login
 if (is_logged_in()) {
     if (is_admin()) {
         header('Location: ../admin/index.php');
@@ -12,120 +12,75 @@ if (is_logged_in()) {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Login User</title>
-    <style>
-        /* CSS yang sudah ada */
-        body {
-            font-family: Arial;
-            background: #0a1d37;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .box {
-            width: 350px;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 0 25px rgba(255,255,255,0.1);
-        }
-        .box h2 {
-            text-align: center;
-            color: #0a1d37;
-            margin-bottom: 15px;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .input-group label {
-            font-size: 14px;
-            color: #0a1d37;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-top: 5px;
-        }
-        .btn {
-            width: 100%;
-            background: #0a1d37;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn:hover {
-            background: #10294f;
-        }
-        .error {
-            background: #ff6161;
-            padding: 10px;
-            border-radius: 8px;
-            color: white;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        .success {
-            background: #19d18c;
-            padding: 10px;
-            border-radius: 8px;
-            color: white;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Galactic Library</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-
-<div class="box">
-
-    <h2>Login User</h2>
-
-    <?php if (isset($_GET['error'])): ?>
-        <div class="error">
-            <?= $_GET['error'] === "empty" ? "Semua field wajib diisi!" : "Username atau password salah!" ?>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="../index.php" style="text-decoration: none; color: inherit;">
+                    <span>📚</span> Galactic Library
+                </a>
+            </div>
         </div>
-    <?php endif; ?>
+    </nav>
 
-    <?php if (isset($_GET['success'])): ?>
-        <div class="success">
-            Berhasil daftar! Silakan login.
+    <div class="form-container">
+        <h2 class="text-center">Selamat Datang Kembali</h2>
+        <p class="text-center" style="margin-bottom: 2rem; color: var(--text-secondary);">
+            Login untuk melanjutkan petualangan membaca Anda
+        </p>
+
+        <?php if (isset($_GET['error'])): ?>
+            <div style="background: rgba(255, 71, 87, 0.1); color: var(--danger-color); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                <?php
+                if ($_GET['error'] == 'invalid') {
+                    echo "❌ Username atau password salah!";
+                } elseif ($_GET['error'] == 'empty') {
+                    echo "❌ Semua field harus diisi!";
+                }
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['success'])): ?>
+            <div style="background: rgba(0, 245, 160, 0.1); color: var(--success-color); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                ✅ Registrasi berhasil! Silakan login.
+            </div>
+        <?php endif; ?>
+
+        <form action="process_login.php" method="POST">
+            <div class="form-group">
+                <label>Username atau Email</label>
+                <input type="text" name="username" class="form-control" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                🔐 Login
+            </button>
+        </form>
+
+        <div class="text-center mt-2">
+            <p style="color: var(--text-secondary);">
+                Belum punya akun? 
+                <a href="register.php" style="color: var(--primary-color); font-weight: 600;">
+                    Daftar Sekarang
+                </a>
+            </p>
         </div>
-    <?php endif; ?>
+    </div>
 
-    <form method="POST" action="process_login.php">
-
-        <div class="input-group">
-            <label>Username / Email</label>
-            <input type="text" name="username" required>
-        </div>
-
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" name="password" required>
-        </div>
-
-        <button class="btn" type="submit">Login User</button>
-
-    </form>
-
-    <p style="text-align: center; margin-top: 15px; font-size: 12px;">
-        <a href="register.php" style="color: #0a1d37;">Daftar Akun Baru</a> | 
-        <a href="admin_login.php" style="color: #0a1d37;">Login Admin</a>
-    </p>
-
-</div>
-
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>

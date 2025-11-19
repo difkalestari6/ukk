@@ -1,6 +1,7 @@
+// difkalestari6/ukk/ukk-a74c6983610426cfeaf45330d1b2cb6328d7fd90/auth/process_login.php
 <?php
 session_start();
-require_once '../config/database.php';
+require_once '../config/database.php'; // Pastikan ini ada
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: login.php");
@@ -33,6 +34,7 @@ if (!password_verify($password, $user['password'])) {
     exit;
 }
 
+// Set session
 $_SESSION['user'] = [
     'id'        => $user['id'],
     'username'  => $user['username'],
@@ -41,9 +43,12 @@ $_SESSION['user'] = [
     'role'      => $user['role']
 ];
 
+// Redirect sesuai role
 if ($user['role'] === "admin") {
+    // Admin yang login dari link user, tetap diarahkan ke dashboard admin
     header("Location: ../admin/index.php");
 } else {
+    // User biasa diarahkan ke dashboard user
     header("Location: ../user/dashboard.php");
 }
 exit;

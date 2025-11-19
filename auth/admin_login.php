@@ -1,12 +1,13 @@
-// difkalestari6/ukk/ukk-a74c6983610426cfeaf45330d1b2cb6328d7fd90/auth/login.php
+// difkalestari6/ukk/ukk-a74c6983610426cfeaf45330d1b2cb6328d7fd90/auth/admin_login.php
 <?php
 require_once '../config/database.php';
 
-// Perbaikan Redirect: Cek jika sudah login, arahkan ke dashboard yang benar
+// Cek jika sudah login, redirect sesuai role
 if (is_logged_in()) {
     if (is_admin()) {
         header('Location: ../admin/index.php');
     } else {
+        // Jika user biasa mencoba akses admin login, kembalikan ke user dashboard
         header('Location: ../user/dashboard.php');
     }
     exit();
@@ -17,9 +18,8 @@ if (is_logged_in()) {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Login User</title>
+    <title>Admin Login</title>
     <style>
-        /* CSS yang sudah ada */
         body {
             font-family: Arial;
             background: #0a1d37;
@@ -35,10 +35,11 @@ if (is_logged_in()) {
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 0 25px rgba(255,255,255,0.1);
+            border-top: 5px solid #FF4757; /* Pembeda visual Admin */
         }
         .box h2 {
             text-align: center;
-            color: #0a1d37;
+            color: #FF4757; 
             margin-bottom: 15px;
         }
         .input-group {
@@ -57,7 +58,7 @@ if (is_logged_in()) {
         }
         .btn {
             width: 100%;
-            background: #0a1d37;
+            background: #FF4757; /* Warna Admin */
             color: white;
             padding: 10px;
             border-radius: 8px;
@@ -66,7 +67,7 @@ if (is_logged_in()) {
             font-size: 14px;
         }
         .btn:hover {
-            background: #10294f;
+            background: #e63745;
         }
         .error {
             background: #ff6161;
@@ -90,7 +91,7 @@ if (is_logged_in()) {
 
 <div class="box">
 
-    <h2>Login User</h2>
+    <h2>Admin Login</h2>
 
     <?php if (isset($_GET['error'])): ?>
         <div class="error">
@@ -98,13 +99,7 @@ if (is_logged_in()) {
         </div>
     <?php endif; ?>
 
-    <?php if (isset($_GET['success'])): ?>
-        <div class="success">
-            Berhasil daftar! Silakan login.
-        </div>
-    <?php endif; ?>
-
-    <form method="POST" action="process_login.php">
+    <form method="POST" action="process_admin_login.php">
 
         <div class="input-group">
             <label>Username / Email</label>
@@ -116,13 +111,12 @@ if (is_logged_in()) {
             <input type="password" name="password" required>
         </div>
 
-        <button class="btn" type="submit">Login User</button>
+        <button class="btn" type="submit">Admin Login</button>
 
     </form>
-
+    
     <p style="text-align: center; margin-top: 15px; font-size: 12px;">
-        <a href="register.php" style="color: #0a1d37;">Daftar Akun Baru</a> | 
-        <a href="admin_login.php" style="color: #0a1d37;">Login Admin</a>
+        Bukan Admin? <a href="login.php" style="color: #FF4757;">Login User</a>
     </p>
 
 </div>
